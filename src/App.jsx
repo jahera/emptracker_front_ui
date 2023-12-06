@@ -6,6 +6,7 @@ import Home from './components/Home';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
 import Footer from './components/Footer';
+import RoomsList from './rooms/RoomsList';
 
 function App() {
 return (
@@ -14,6 +15,7 @@ return (
     <div>
       <Header/>
       <main className="py-3">
+      <RoomsList />
       <Container>
         <Switch>
           <Route exact path='/home' component={Home} />
