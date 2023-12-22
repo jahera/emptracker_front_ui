@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { Form, Button} from 'react-bootstrap';
+import { useHistory } from "react-router-dom";
+import { signUp } from '../services/auth';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password_confirmation, setPasswordConfirmation] = useState('');
   const [authenticity_token, setAuthenticityToken] = useState('');
+  const navigate = useHistory();
 
   const handleSignup = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/signup',
-        { user: { email, password, password_confirmation, authenticity_token: getMetaContent("csrf-token")} });
-      console.log(response.data); // Handle success
-      //this.props.history.push('/Home')
-      window.location.href ="/Home"
+      const response = await signUp({ email, password, password_confirmation, authenticity_token: getMetaContent("csrf-token")});
+      // const response = await axios.post('http://localhost:3001/signup',
+        // { user: { email, password, password_confirmation, authenticity_token: getMetaContent("csrf-token")} });
+      navigate.push('/')
     } catch (error) {
       console.error('Error signing up:', error);
     }
@@ -21,26 +23,24 @@ const Signup = () => {
 
   return (
     <div>
-      <h2>Sign Up</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input name="confirm password"
-        value={password_confirmation}
-        onChange={(e) => setPasswordConfirmation(e.target.value)}
-        type="password"
-        placeholder="Confirm Password"/>
-
-      <button onClick={handleSignup}>Sign Up</button>
+    <h1> Sign Up </h1>
+      <Form>
+        <Form.Group className="mb-3" controlId="formGroupEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formGroupPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formGroupConfirmPassword">
+          <Form.Label>confirm password</Form.Label>
+          <Form.Control name="confirm password" type="password" placeholder="confirm password" value={password_confirmation} onChange={(e) => setPasswordConfirmation(e.target.value)}/>
+        </Form.Group>
+      </Form>
+      <Button variant="primary" type="submit" onClick={handleSignup}>
+        Submit
+      </Button>
     </div>
   );
 };
